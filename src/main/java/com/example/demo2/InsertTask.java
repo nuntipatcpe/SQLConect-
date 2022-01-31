@@ -17,6 +17,7 @@ public class InsertTask implements Runnable{
     public InsertTask(String c1 ,String c2) {
         this.c1 = c1;
         this.c2=c2;
+
     }
 
     @Override

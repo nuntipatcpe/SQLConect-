@@ -3,7 +3,7 @@ package com.example.demo2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SowDAO extends DAO{
+public class SowDAO extends DAO<SowModel>{
 
     @Override
     List columnList() {
@@ -18,6 +18,7 @@ public class SowDAO extends DAO{
 
     @Override
     String nameTable() {
+
         return "sow";
     }
 }

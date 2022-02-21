@@ -1,4 +1,6 @@
-package com.example.demo2;
+package com.example.demo2.Task;
+
+import com.example.demo2.DAO.SowDAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,8 +33,9 @@ public class InsertTask implements Runnable{
 
 
     private void insertStatement(String c1, String c2) throws SQLException {
-        sowDAO.columnList();
-        PreparedStatement preparedStatementINSERT = connection().prepareStatement("INSERT INTO "+sowDAO.nameTable()+" ("+sowDAO.columnList().get(0)+","+sowDAO.columnList().get(1)+","+sowDAO.columnList().get(2)+") VALUES(?,?,?)");
+        sowDAO.columnAllList();
+        PreparedStatement preparedStatementINSERT = connection().prepareStatement("INSERT INTO "+sowDAO.tableName()+" ("+sowDAO.columnAllList().get(0)+","+sowDAO.columnAllList().get(1)+","+sowDAO.columnAllList().get(2)+") VALUES(?,?,?)");
+
         preparedStatementINSERT.setString(1,c1);
         preparedStatementINSERT.setString(2,c2);
         preparedStatementINSERT.setString(3, String.valueOf(LocalDate.now()));
@@ -42,8 +45,10 @@ public class InsertTask implements Runnable{
         preparedStatementINSERT.close();
     }
 
-    private Connection connection() throws SQLException {
 
+
+
+    private Connection connection() throws SQLException {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException e) {

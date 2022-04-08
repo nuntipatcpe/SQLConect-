@@ -33,9 +33,11 @@ public class SowDAO extends DAO<SowModel>{
 
     @Override
     public void setValueUpdate(SowModel sowModel, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(3,sowModel.getFile_name());
+
         preparedStatement.setString(1,sowModel.getStatus());
         preparedStatement.setString(2,sowModel.getPath_file());
+        preparedStatement.setString(3,sowModel.getFile_name());
+
     }
 
     @Override

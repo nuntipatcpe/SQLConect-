@@ -61,17 +61,39 @@ public class App extends Application implements onSelectListener<SowModel> {
         DAO<SowModel> dao  = new SowDAO(databaseConnect);//  1
 
 
-        dao.getAll();
-        for (SowModel sowModel : dao.getAll()){
-            System.out.println( sowModel.getFile_name());
+
+        SowModel sowModel = new SowModel();
+        sowModel.setFile_name("test1");
+        sowModel.setStatus("t");
+        sowModel.setPath_file("path");
+
+        dao.save(sowModel);//2
+
+        for (SowModel sowModelList : dao.getAll()){
+          //  System.out.println( sowModelList.getFile_name());
+            System.out.println( sowModelList.getStatus());
+           // System.out.println( sowModelList.getPath_file());
         }
 
-//        SowModel sowModel = new SowModel();
-//        sowModel.setFile_name("s2");
-//        sowModel.setStatus("ssss");
-//        sowModel.setPath_file("sss");
-//
-//        dao.save(sowModel);//2
+        dao.update(sowModel);//2
+
+        sowModel.setFile_name("test1");
+        sowModel.setStatus("t2");
+        sowModel.setPath_file("path");
+
+        for (SowModel sowModelList : dao.getAll()){
+           // System.out.println( sowModelList.getFile_name());
+            System.out.println( sowModelList.getStatus());
+          //  System.out.println( sowModelList.getPath_file());
+        }
+
+        dao.delete(sowModel);//2
+
+        for (SowModel sowModelList : dao.getAll()){
+          //  System.out.println( sowModelList.getFile_name());
+            System.out.println( sowModelList.getStatus());
+           // System.out.println( sowModelList.getPath_file());
+        }
 
 //        SelectTask<SowModel> selectTask = new SelectTask<>(dao,App.this);
 //        Thread thread = new Thread(selectTask);

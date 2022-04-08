@@ -20,8 +20,9 @@ public abstract  class DAO<T>{
         PreparedStatement preparedStatementSELECT = null;
         try {
             preparedStatementSELECT = this.databaseConnect.getConnection().prepareStatement(selectString());
-            ResultSet resultSet= preparedStatementSELECT.executeQuery();
+            System.out.println(preparedStatementSELECT);
 
+            ResultSet resultSet= preparedStatementSELECT.executeQuery();
             while (resultSet.next()){
                 T setObjectResult = setObjectResult(resultSet);
                 list.add(setObjectResult);
@@ -47,6 +48,8 @@ public abstract  class DAO<T>{
         try {
             PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(insertString());
             setValueInsert(t,preparedStatement);//4
+            System.out.println(preparedStatement);
+
 
 //            SowModel sowModel = new SowModel();
 //            sowModel.setPath_file("a");
@@ -73,6 +76,7 @@ public abstract  class DAO<T>{
         try {
             PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(deleteString());
             setValueDelete(t,preparedStatement);
+            System.out.println(preparedStatement);
 
             boolean isSuccess = preparedStatement.execute();
             System.out.println("Delete success : "+ !isSuccess);
@@ -88,6 +92,7 @@ public abstract  class DAO<T>{
         try {
             PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(updateString());
             setValueUpdate(t,preparedStatement);
+            System.out.println(preparedStatement);
             int isSuccess = preparedStatement.executeUpdate();
             System.out.println("Update :"+isSuccess+" row");
             preparedStatement.close();

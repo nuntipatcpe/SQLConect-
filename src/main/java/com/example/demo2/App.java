@@ -1,5 +1,10 @@
 package com.example.demo2;
 
+import com.example.demo2.DAO.DAO;
+import com.example.demo2.DAO.SowDAO;
+import com.example.demo2.Database.DatabaseConnect;
+import com.example.demo2.Database.Type.DataType;
+import com.example.demo2.Database.Type.MariaDB;
 import com.example.demo2.Listener.onSelectListener;
 import com.example.demo2.Model.SowModel;
 import javafx.application.Application;
@@ -24,14 +29,14 @@ public class App extends Application implements onSelectListener<SowModel> {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
 
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        statementExam(null);
-        preparedStatementExam(null);
+//        try {
+//            Class.forName("org.mariadb.jdbc.Driver");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        statementExam(null);
+//        preparedStatementExam(null);
 
 //        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("hello-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
@@ -50,16 +55,16 @@ public class App extends Application implements onSelectListener<SowModel> {
 //        t1.start();
 
 
-//        DataType dataType = new MariaDB();
-//        DatabaseConnect databaseConnect =
-//                new DatabaseConnect(dataType,"127.0.1:3306","3306","projectplan","design_view","1234");
-//        DAO<SowModel> dao  = new SowDAO(databaseConnect);//  1
-//
-//
-//        dao.getAll();
-//        for (SowModel sowModel : dao.getAll()){
-//            System.out.println( sowModel.getFile_name());
-//        }
+        DataType dataType = new MariaDB();
+        DatabaseConnect databaseConnect =
+                new DatabaseConnect(dataType,"127.0.1:3306","3306","projectplan","design_view","1234");
+        DAO<SowModel> dao  = new SowDAO(databaseConnect);//  1
+
+
+        dao.getAll();
+        for (SowModel sowModel : dao.getAll()){
+            System.out.println( sowModel.getFile_name());
+        }
 
 //        SowModel sowModel = new SowModel();
 //        sowModel.setFile_name("s2");
@@ -196,7 +201,7 @@ public class App extends Application implements onSelectListener<SowModel> {
 
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mariadb//127.0.1:3306/NameDatabase",
+                    "jdbc:mariadb//127.0.1:3306/projectplan",
                     "root","password"
             );
 

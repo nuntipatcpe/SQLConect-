@@ -9,7 +9,11 @@ import java.util.List;
 
 public abstract  class DAO<T>{
 
+    DatabaseConnect databaseConnect;
 
+    public DAO(DatabaseConnect databaseConnect) {
+        this.databaseConnect = databaseConnect;
+    }
 
     public List<T> getAll()  {
         List<T> list = new ArrayList<>();
@@ -79,6 +83,7 @@ public abstract  class DAO<T>{
         }
 
     }
+
     public void update(T t) {
         try {
             PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(updateString());
@@ -92,7 +97,6 @@ public abstract  class DAO<T>{
             e.printStackTrace();
         }
     }
-
 
     private String deleteString(){
         StringBuilder stringBuilder = new StringBuilder();
@@ -167,11 +171,7 @@ public abstract  class DAO<T>{
 
     }
 
-    public DAO(DatabaseConnect databaseConnect) {
-        this.databaseConnect = databaseConnect;
-    }
 
-    DatabaseConnect databaseConnect;
 
     private Connection connection() throws SQLException {
 
@@ -185,7 +185,6 @@ public abstract  class DAO<T>{
                 "design_view","1234"
         );
     }
-
 
     public abstract List<String> columnAllList();
     public abstract String tableName();

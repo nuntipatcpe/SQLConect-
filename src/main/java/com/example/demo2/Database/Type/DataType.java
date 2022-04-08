@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public interface  DataType {
 
-    public String setDriver();
-    public String setDriverManagerUrl(String ip,String port,String nameDatabase);
+    String setDriver();
+    String setDriverManagerUrl(String ip,String port,String nameDatabase);
 
 
 //    private Connection connection() throws SQLException {

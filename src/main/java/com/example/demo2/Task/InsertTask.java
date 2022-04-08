@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class InsertTask implements Runnable{
-    SowDAO sowDAO = new SowDAO();
+    //SowDAO sowDAO = new SowDAO();
 
 
     private String c1;
@@ -33,16 +33,16 @@ public class InsertTask implements Runnable{
 
 
     private void insertStatement(String c1, String c2) throws SQLException {
-        sowDAO.columnAllList();
-        PreparedStatement preparedStatementINSERT = connection().prepareStatement("INSERT INTO "+sowDAO.tableName()+" ("+sowDAO.columnAllList().get(0)+","+sowDAO.columnAllList().get(1)+","+sowDAO.columnAllList().get(2)+") VALUES(?,?,?)");
-
-        preparedStatementINSERT.setString(1,c1);
-        preparedStatementINSERT.setString(2,c2);
-        preparedStatementINSERT.setString(3, String.valueOf(LocalDate.now()));
-        Boolean isSuccess = preparedStatementINSERT.execute();
-
-        System.out.println("Insert :"+!isSuccess);
-        preparedStatementINSERT.close();
+//        sowDAO.columnAllList();
+//        PreparedStatement preparedStatementINSERT = connection().prepareStatement("INSERT INTO "+sowDAO.tableName()+" ("+sowDAO.columnAllList().get(0)+","+sowDAO.columnAllList().get(1)+","+sowDAO.columnAllList().get(2)+") VALUES(?,?,?)");
+//
+//        preparedStatementINSERT.setString(1,c1);
+//        preparedStatementINSERT.setString(2,c2);
+//        preparedStatementINSERT.setString(3, String.valueOf(LocalDate.now()));
+//        Boolean isSuccess = preparedStatementINSERT.execute();
+//
+//        System.out.println("Insert :"+!isSuccess);
+//        preparedStatementINSERT.close();
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.demo2.DAO;
 
+import com.example.demo2.Database.DatabaseConnect;
 import com.example.demo2.Model.SowModel;
 
 import java.sql.*;
@@ -14,7 +15,7 @@ public abstract  class DAO<T>{
         List<T> list = new ArrayList<>();
         PreparedStatement preparedStatementSELECT = null;
         try {
-            preparedStatementSELECT = connection().prepareStatement(selectString());
+            preparedStatementSELECT = this.databaseConnect.getConnection().prepareStatement(selectString());
             ResultSet resultSet= preparedStatementSELECT.executeQuery();
 
             while (resultSet.next()){
@@ -27,7 +28,7 @@ public abstract  class DAO<T>{
         }finally {
 
             try {
-                connection().close();
+                this.databaseConnect.getConnection().close();
                 preparedStatementSELECT.close();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -36,12 +37,11 @@ public abstract  class DAO<T>{
         return list;
     }
 
-    public void save(T t){ //3
+    public void save(T t){
         //  PreparedStatement preparedStatement = null;
+
         try {
-            PreparedStatement preparedStatement = connection().prepareStatement(insertString());
-
-
+            PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(insertString());
             setValueInsert(t,preparedStatement);//4
 
 //            SowModel sowModel = new SowModel();
@@ -57,7 +57,7 @@ public abstract  class DAO<T>{
             boolean isSuccess = preparedStatement.execute();//6
 
             preparedStatement.close();
-            connection().close();
+            this.databaseConnect.getConnection().close();
 
             System.out.println("Insert :"+!isSuccess);
         } catch (SQLException e) {
@@ -67,13 +67,13 @@ public abstract  class DAO<T>{
 
     public void delete(T t){
         try {
-            PreparedStatement preparedStatement = connection().prepareStatement(deleteString());
+            PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(deleteString());
             setValueDelete(t,preparedStatement);
 
             boolean isSuccess = preparedStatement.execute();
             System.out.println("Delete success : "+ !isSuccess);
             preparedStatement.close();
-            connection().close();
+            this.databaseConnect.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,12 +81,12 @@ public abstract  class DAO<T>{
     }
     public void update(T t) {
         try {
-            PreparedStatement preparedStatement = connection().prepareStatement(updateString());
+            PreparedStatement preparedStatement = this.databaseConnect.getConnection().prepareStatement(updateString());
             setValueUpdate(t,preparedStatement);
             int isSuccess = preparedStatement.executeUpdate();
             System.out.println("Update :"+isSuccess+" row");
             preparedStatement.close();
-            connection().close();
+            this.databaseConnect.getConnection().close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,7 +167,14 @@ public abstract  class DAO<T>{
 
     }
 
+    public DAO(DatabaseConnect databaseConnect) {
+        this.databaseConnect = databaseConnect;
+    }
+
+    DatabaseConnect databaseConnect;
+
     private Connection connection() throws SQLException {
+
         try {
             Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException e) {

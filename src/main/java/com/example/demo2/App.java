@@ -1,7 +1,5 @@
 package com.example.demo2;
 
-import com.example.demo2.DAO.DAO;
-import com.example.demo2.DAO.SowDAO;
 import com.example.demo2.Listener.onSelectListener;
 import com.example.demo2.Model.SowModel;
 import javafx.application.Application;
@@ -21,8 +19,19 @@ public class App extends Application implements onSelectListener<SowModel> {
     String columnStatus = "status";
     String columnDate = "date";
 
+
+
     @Override
     public void start(Stage stage) throws IOException, SQLException {
+
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        statementExam(null);
+        preparedStatementExam(null);
 
 //        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("hello-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
@@ -40,14 +49,24 @@ public class App extends Application implements onSelectListener<SowModel> {
 //        Thread t1 = new Thread(selectTask);
 //        t1.start();
 
-        DAO<SowModel> dao  = new SowDAO();//  1
 
-        SowModel sowModel = new SowModel();
-        sowModel.setFile_name("s2");
-        sowModel.setStatus("ssss");
-        sowModel.setPath_file("sss");
+//        DataType dataType = new MariaDB();
+//        DatabaseConnect databaseConnect =
+//                new DatabaseConnect(dataType,"127.0.1:3306","3306","projectplan","design_view","1234");
+//        DAO<SowModel> dao  = new SowDAO(databaseConnect);//  1
+//
+//
+//        dao.getAll();
+//        for (SowModel sowModel : dao.getAll()){
+//            System.out.println( sowModel.getFile_name());
+//        }
 
-        dao.save(sowModel);//2
+//        SowModel sowModel = new SowModel();
+//        sowModel.setFile_name("s2");
+//        sowModel.setStatus("ssss");
+//        sowModel.setPath_file("sss");
+//
+//        dao.save(sowModel);//2
 
 //        SelectTask<SowModel> selectTask = new SelectTask<>(dao,App.this);
 //        Thread thread = new Thread(selectTask);
@@ -85,15 +104,13 @@ public class App extends Application implements onSelectListener<SowModel> {
         launch();
     }
 
-
-
     private void updateStatement(String newC1, String newC2 , String oldPk) throws SQLException {
 
         PreparedStatement preparedStatementUPDATE = connection().prepareStatement("UPDATE "+tableName+" SET "+columnPk+" = ?,"+columnStatus+" = ? WHERE file_name =?  ");
         preparedStatementUPDATE.setString(1,newC1);
         preparedStatementUPDATE.setString(2,newC2);
         preparedStatementUPDATE.setString(3,oldPk);//PK
-        Integer isRowUpdate = preparedStatementUPDATE.executeUpdate();
+        int isRowUpdate = preparedStatementUPDATE.executeUpdate();
         System.out.println("Update row :"+isRowUpdate);
         preparedStatementUPDATE.close();
     }
@@ -125,7 +142,7 @@ public class App extends Application implements onSelectListener<SowModel> {
     private void deleteStatement(String deletePk) throws SQLException {
         PreparedStatement preparedStatementDELETE = connection().prepareStatement("DELETE FROM "+tableName+" WHERE "+columnPk+" = ? ");
             preparedStatementDELETE.setString(1,deletePk);
-            Boolean isSuccess=  preparedStatementDELETE.execute();
+            boolean isSuccess=  preparedStatementDELETE.execute();
 
             System.out.println("delete :"+!isSuccess);
             preparedStatementDELETE.close();
@@ -137,7 +154,7 @@ public class App extends Application implements onSelectListener<SowModel> {
             preparedStatementINSERT.setString(1,c1);
             preparedStatementINSERT.setString(2,c2);
             preparedStatementINSERT.setString(3, String.valueOf(LocalDate.now()));
-            Boolean isSuccess = preparedStatementINSERT.execute();
+            boolean isSuccess = preparedStatementINSERT.execute();
 
             System.out.println("Insert :"+!isSuccess);
             preparedStatementINSERT.close();
@@ -154,6 +171,7 @@ public class App extends Application implements onSelectListener<SowModel> {
                     "jdbc:mariadb://127.0.1:3306/projectplan",
                     "design_view","1234"
             );
+
         return connection;
     }
 
@@ -172,6 +190,91 @@ public class App extends Application implements onSelectListener<SowModel> {
        System.out.println( data.getFile_name()+" || "+data.getStatus()+" || "+data.getPath_file());
    }
     }
+
+
+    private static void statementExam(Connection connection){
+
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:mariadb//127.0.1:3306/NameDatabase",
+                    "root","password"
+            );
+
+            Statement statement = connection.createStatement();
+
+
+            //__________CREATE UPDATE DELETE__________
+            Boolean isSuccessful = statement.execute("INSERT INTO item (id,name) VALUES(1,'boom')");
+            //__________CREATE UPDATE DELETE__________
+
+
+            //__________SELECT__________
+            //executeQuery use "SELECT" only
+            ResultSet resultSet = statement.executeQuery("SELECT id , name FROM item");
+
+            List<String> stringListSELECT = new ArrayList<>();
+
+            while (resultSet.next()){
+                stringListSELECT.add(resultSet.getString(2));
+                stringListSELECT.add(resultSet.getString("id"));
+            }
+            //__________SELECT__________
+
+            resultSet.close();//************ close every time
+            statement.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close(); //************ close every time
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static void preparedStatementExam(Connection connection){
+
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:mariadb://127.0.1:3306/projectplan",
+                    "design_view","1234"
+            );
+
+
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM item WHERE id = ?");
+            preparedStatement.setString(1,"id");
+            ResultSet resultSet= preparedStatement.executeQuery();
+
+            Integer affectedRow = preparedStatement.executeUpdate();
+            Boolean isSuccess = preparedStatement.execute();
+
+            List<String> stringList = new ArrayList<>();
+            while (resultSet.next()){
+                stringList.add(resultSet.getString(2));
+                stringList.add(resultSet.getString("id"));
+
+            }
+            //__________SELECT__________
+
+            resultSet.close();//************ close every time
+            preparedStatement.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close(); //************ close every time
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
 
     @Override
     public void setList(List<SowModel> list) {

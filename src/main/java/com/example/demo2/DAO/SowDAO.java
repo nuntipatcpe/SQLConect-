@@ -1,5 +1,6 @@
 package com.example.demo2.DAO;
 
+import com.example.demo2.Database.DatabaseConnect;
 import com.example.demo2.Model.SowModel;
 
 import java.sql.PreparedStatement;
@@ -9,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SowDAO extends DAO<SowModel>{
+
+    public SowDAO(DatabaseConnect databaseConnect) {
+        super(databaseConnect);
+    }
 
     @Override
     public SowModel setObjectResult(ResultSet resultSet) throws SQLException {

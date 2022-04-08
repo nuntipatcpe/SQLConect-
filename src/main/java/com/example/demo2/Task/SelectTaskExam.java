@@ -1,6 +1,9 @@
 package com.example.demo2.Task;
 
 import com.example.demo2.DAO.DAO;
+import com.example.demo2.Database.DatabaseConnect;
+import com.example.demo2.Database.Type.DataType;
+import com.example.demo2.Database.Type.MariaDB;
 import com.example.demo2.Listener.onSelectListener;
 import com.example.demo2.DAO.SowDAO;
 
@@ -12,7 +15,12 @@ public class SelectTaskExam implements Runnable{
 
 private onSelectListener listener ;
 
-    DAO stringDAO = new SowDAO();
+
+    DataType dataType = new MariaDB();
+    DatabaseConnect databaseConnect =
+            new DatabaseConnect(dataType,"127.0.1:3306","3306","projectplan","design_view","1234");
+
+    DAO stringDAO = new SowDAO(databaseConnect);
 
      public SelectTaskExam(onSelectListener listener){
          this.listener = listener;
